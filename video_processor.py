@@ -137,7 +137,7 @@ class VideoProcessor:
         """Classify features using ML model"""
         try:
             # Prepare feature vector
-            feature_columns = self.model_metadata.get('feature_columns', [])
+            feature_columns = self.model_metadata.get('feature_names', [])
             feature_vector = []
 
             for col in feature_columns:

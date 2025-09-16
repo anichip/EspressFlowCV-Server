@@ -203,7 +203,7 @@ def model_info():
     return jsonify({
         'model_type': 'Random Forest',
         'version': '2.0',
-        'features_count': len(model_metadata.get('feature_columns', [])),
+        'features_count': len(model_metadata.get('feature_names', [])),
         'optimal_threshold': model_metadata.get('optimal_threshold', 0.5),
         'roc_auc_score': model_metadata.get('roc_auc_score', 0.0),
         'timestamp': datetime.now().isoformat()
