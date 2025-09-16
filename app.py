@@ -136,7 +136,7 @@ def analyze_video():
 
         # Save video temporarily
         video_id = str(uuid.uuid4())
-        video_filename = f"{video_id}.mp4"
+        video_filename = f"{video_id}.mov"
         video_path = os.path.join(UPLOAD_FOLDER, video_filename)
         video_file.save(video_path)
 
