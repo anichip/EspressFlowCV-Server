@@ -80,6 +80,44 @@ def health_check():
         'upload_folder': UPLOAD_FOLDER
     }), 200
 
+@app.route('/api/debug', methods=['GET'])
+def debug_info():
+    """Debug endpoint to check what's available"""
+    import sys
+    import os
+
+    debug_info = {
+        'python_version': sys.version,
+        'current_dir': os.getcwd(),
+        'files_present': os.listdir('.'),
+        'model_files_exist': {
+            'espresso_model.joblib': os.path.exists('espresso_model.joblib'),
+            'model_metadata.joblib': os.path.exists('model_metadata.joblib'),
+            'espresso_flow_features.py': os.path.exists('espresso_flow_features.py')
+        }
+    }
+
+    # Test individual imports
+    try:
+        import cv2
+        debug_info['cv2_version'] = cv2.__version__
+    except Exception as e:
+        debug_info['cv2_error'] = str(e)
+
+    try:
+        import sklearn
+        debug_info['sklearn_version'] = sklearn.__version__
+    except Exception as e:
+        debug_info['sklearn_error'] = str(e)
+
+    try:
+        import joblib
+        debug_info['joblib_available'] = True
+    except Exception as e:
+        debug_info['joblib_error'] = str(e)
+
+    return jsonify(debug_info), 200
+
 @app.route('/api/analyze', methods=['POST'])
 def analyze_video():
     """Analyze uploaded video with ML model"""
