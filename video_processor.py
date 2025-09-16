@@ -67,14 +67,16 @@ class VideoProcessor:
 
             logger.info(f"📹 Processing video | FPS: {fps} | Total Frames: {total_frames}")
 
-            # Calculate frame limits
-            max_frames = int(min(clip_duration_sec * target_fps, total_frames))
-            frames_to_skip = int(fps * skip_initial_sec)
+            # Calculate frame limits for efficient extraction
+            max_frames = int(clip_duration_sec * target_fps)  # Only frames we need
+            start_time_ms = skip_initial_sec * 1000  # Convert to milliseconds
+
+            # Seek directly to start time (much faster than reading every frame)
+            cap.set(self.cv2.CAP_PROP_POS_MSEC, start_time_ms)
 
             # Create temporary directory for frames
             temp_dir = tempfile.mkdtemp(prefix="espresso_frames_")
 
-            frame_count = 0
             saved_frame_count = 0
             last_valid_frame = None
 
@@ -82,11 +84,6 @@ class VideoProcessor:
                 ret, frame = cap.read()
                 if not ret:
                     break
-
-                # Skip initial frames
-                if frame_count < frames_to_skip:
-                    frame_count += 1
-                    continue
 
                 # Save frame
                 frame_filename = f"frame_{saved_frame_count:04d}.jpg"
@@ -96,8 +93,6 @@ class VideoProcessor:
                 if success:
                     last_valid_frame = frame_path
                     saved_frame_count += 1
-
-                frame_count += 1
 
             cap.release()
 
