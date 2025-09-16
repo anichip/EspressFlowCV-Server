@@ -148,9 +148,12 @@ def analyze_video():
         # Clean up temporary file
         os.remove(video_path)
 
+        # Generate simple integer ID for iOS compatibility
+        shot_id_int = hash(video_id) % 1000000  # Convert UUID to simple int
+
         # Format response
         response = {
-            'shot_id': video_id,
+            'shot_id': shot_id_int,
             'filename': video_file.filename,
             'analysis_result': result.get('classification', 'unknown'),
             'confidence': round(result.get('confidence', 0.0), 3),
