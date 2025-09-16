@@ -149,18 +149,18 @@ class VideoProcessor:
 
             # Get prediction probability
             prob = self.model.predict_proba(X)[0]
-            good_prob = prob[1]  # Probability of "good"
+            good_prob = prob[0]  # Probability of "good" (index 0 based on label_mapping)
 
-            # Apply adjusted threshold for iPhone videos
-            optimal_threshold = 0.48  # Lowered from 0.518 to reduce false positives
+            # Apply optimal threshold from model training
+            optimal_threshold = 0.518  # Back to original optimal threshold
             classification = 'good' if good_prob >= optimal_threshold else 'under-extracted'
 
             return {
                 'classification': classification,
                 'confidence': float(good_prob),
                 'probabilities': {
-                    'under-extracted': float(prob[0]),
-                    'good': float(prob[1])
+                    'good': float(prob[0]),
+                    'under-extracted': float(prob[1])
                 },
                 'threshold_used': optimal_threshold
             }
