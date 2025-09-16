@@ -151,8 +151,8 @@ class VideoProcessor:
             prob = self.model.predict_proba(X)[0]
             good_prob = prob[1]  # Probability of "good"
 
-            # Apply optimal threshold
-            optimal_threshold = self.model_metadata.get('optimal_threshold', 0.5)
+            # Apply adjusted threshold for iPhone videos
+            optimal_threshold = 0.48  # Lowered from 0.518 to reduce false positives
             classification = 'good' if good_prob >= optimal_threshold else 'under-extracted'
 
             return {
