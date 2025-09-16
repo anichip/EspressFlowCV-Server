@@ -50,8 +50,8 @@ class VideoProcessor:
             raise
 
     def extract_frames_from_video(self, video_path: str,
-                                 clip_duration_sec: int = 7,
-                                 target_fps: int = 30,  # Reduced from 60 to 30 for faster processing
+                                 clip_duration_sec: int = 5,  # Reduced from 7 to 5 seconds
+                                 target_fps: int = 15,  # Reduced from 30 to 15 for much faster processing
                                  skip_initial_sec: int = 1) -> Optional[str]:
         """Extract frames from video for analysis"""
         cap = self.cv2.VideoCapture(video_path)
